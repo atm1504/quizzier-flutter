@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'quiz_brain.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 QuizBrain quizBrain = QuizBrain();
 
@@ -29,23 +30,65 @@ class QuizPage extends StatefulWidget {
 
 class _QuizPageState extends State<QuizPage> {
   List<Widget> scoreKeeper = [];
+
+  Alert completionWidget() {
+    return Alert(
+      context: context,
+      type: AlertType.warning,
+      title: "RFLUTTER ALERT",
+      desc: "Flutter is more awesome with RFlutter Alert.",
+      buttons: [
+        DialogButton(
+          onPressed: () => Navigator.pop(context),
+          color: const Color.fromRGBO(0, 179, 134, 1.0),
+          child: const Text(
+            "CANCEL",
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+        ),
+        DialogButton(
+          onPressed: () {
+            setState(() {
+              quizBrain.resetQuestions();
+              scoreKeeper = [];
+              quizBrain.getQuestion();
+            });
+            Navigator.pop(context);
+          },
+          gradient: const LinearGradient(colors: [
+            Color.fromRGBO(116, 116, 191, 1.0),
+            Color.fromRGBO(52, 138, 199, 1.0)
+          ]),
+          child: const Text(
+            "RESTART",
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+        )
+      ],
+    );
+  }
+
   void checkAnswer(bool userAnswer) {
     bool correctAnswer = quizBrain.getAnswer();
     Icon widg;
     if (correctAnswer == userAnswer) {
-      widg = Icon(
+      widg = const Icon(
         Icons.check,
         color: Colors.green,
       );
     } else {
-      widg = Icon(
+      widg = const Icon(
         Icons.close,
         color: Colors.red,
       );
     }
     setState(() {
-      quizBrain.nextQuestion();
-      scoreKeeper.add(widg);
+      bool exists = quizBrain.nextQuestion();
+      if (exists) {
+        scoreKeeper.add(widg);
+      } else {
+        completionWidget().show();
+      }
     });
   }
 
@@ -63,7 +106,7 @@ class _QuizPageState extends State<QuizPage> {
               child: Text(
                 quizBrain.getQuestion(),
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 25.0,
                   color: Colors.white,
                 ),
@@ -75,10 +118,10 @@ class _QuizPageState extends State<QuizPage> {
           child: Padding(
             padding: EdgeInsets.all(15.0),
             child: TextButton(
-              style: ButtonStyle(
+              style: const ButtonStyle(
                 backgroundColor: MaterialStatePropertyAll<Color>(Colors.green),
               ),
-              child: Text(
+              child: const Text(
                 'True',
                 style: TextStyle(
                   color: Colors.white,
@@ -95,10 +138,10 @@ class _QuizPageState extends State<QuizPage> {
           child: Padding(
             padding: EdgeInsets.all(15.0),
             child: TextButton(
-              style: ButtonStyle(
+              style: const ButtonStyle(
                 backgroundColor: MaterialStatePropertyAll<Color>(Colors.red),
               ),
-              child: Text(
+              child: const Text(
                 'False',
                 style: TextStyle(
                   fontSize: 20.0,
