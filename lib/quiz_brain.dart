@@ -63,4 +63,8 @@ class QuizBrain {
   bool getAnswer() {
     return _questionBank[_questionNumber].questionAnswer;
   }
+
+  void resetQuestions() {
+    _questionNumber = 0;
+  }
 }

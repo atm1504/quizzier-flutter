@@ -29,6 +29,26 @@ class QuizPage extends StatefulWidget {
 
 class _QuizPageState extends State<QuizPage> {
   List<Widget> scoreKeeper = [];
+  void checkAnswer(bool userAnswer) {
+    bool correctAnswer = quizBrain.getAnswer();
+    Icon widg;
+    if (correctAnswer == userAnswer) {
+      widg = Icon(
+        Icons.check,
+        color: Colors.green,
+      );
+    } else {
+      widg = Icon(
+        Icons.close,
+        color: Colors.red,
+      );
+    }
+    setState(() {
+      quizBrain.nextQuestion();
+      scoreKeeper.add(widg);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -66,23 +86,7 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                bool correctAnswer = quizBrain.getAnswer();
-                Icon widg;
-                if (correctAnswer == true) {
-                  widg = Icon(
-                    Icons.check,
-                    color: Colors.green,
-                  );
-                } else {
-                  widg = Icon(
-                    Icons.close,
-                    color: Colors.red,
-                  );
-                }
-                setState(() {
-                  quizBrain.nextQuestion();
-                  scoreKeeper.add(widg);
-                });
+                checkAnswer(true);
               },
             ),
           ),
@@ -102,23 +106,7 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                bool correctAnswer = quizBrain.getAnswer();
-                Icon widg;
-                if (correctAnswer == false) {
-                  widg = Icon(
-                    Icons.check,
-                    color: Colors.green,
-                  );
-                } else {
-                  widg = Icon(
-                    Icons.close,
-                    color: Colors.red,
-                  );
-                }
-                setState(() {
-                  quizBrain.nextQuestion();
-                  scoreKeeper.add(widg);
-                });
+                checkAnswer(false);
                 //The user picked false.
               },
             ),
